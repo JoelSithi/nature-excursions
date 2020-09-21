@@ -1,0 +1,60 @@
+extends base
+
+mixin navItem(link, text, icon, active)
+  li(class=`${active ? 'side-nav--active' : ''}`)
+    a(href=`${link}`)
+      svg
+        use(xlink:href=`img/icons.svg#icon-${icon}`)
+      | #{text}
+
+block content
+  main.main
+  .user-view
+    nav.user-view__menu
+      ul.side-nav
+        +navItem('#', 'Réglages', 'settings', true)
+        +navItem('#', 'Mes Réservations', 'briefcase')
+        +navItem('#', 'Mes Avis', 'star')
+        +navItem('#', 'Règlement', 'credit-card')
+
+      - if(user.role === 'admin')
+        .admin-nav
+          h5.admin-nav__heading Admin
+          ul.side-nav
+            +navItem('#', 'Gérer excursions', 'map')
+            +navItem('#', 'Gérer utilisateurs', 'users')
+            +navItem('#', 'Gérer les avis', 'star')
+            +navItem('#', 'Gérer les réservations', 'briefcase')
+            
+            
+
+    .user-view__content
+      .user-view__form-container
+        h2.heading-secondary.ma-bt-md Réglages du compte
+        form.form.form-user-data
+          .form__group
+            label.form__label(for='name') Nom
+            input#name.form__input(type='text', value=`${user.name}`, required)
+          .form__group.ma-bt-md
+            label.form__label(for='email') Email 
+            input#email.form__input(type='email', value=`${user.email}`, required)
+          .form__group.form__photo-upload
+            img.form__user-photo(src=`/img/users/${user.photo}`, alt='User photo')
+            a.btn-text(href='') Choisir nouvelle photo
+          .form__group.right
+            button.btn.btn--small.btn--green Enregistrer réglages
+      .line &nbsp;
+      .user-view__form-container
+        h2.heading-secondary.ma-bt-md Changer le mot de passe
+        form.form.form-user-settings
+          .form__group
+            label.form__label(for='password-current') Mot de passe actuel
+            input#password-current.form__input(type='password', placeholder='••••••••', required, minlength='8')
+          .form__group
+            label.form__label(for='password') Nouveau mot de passe
+            input#password.form__input(type='password', placeholder='••••••••', required, minlength='8')
+          .form__group.ma-bt-lg
+            label.form__label(for='password-confirm') Confirmer mot de passe
+            input#password-confirm.form__input(type='password', placeholder='••••••••', required, minlength='8')
+          .form__group.right
+            button.btn.btn--small.btn--green Enregistrez mot de passe
